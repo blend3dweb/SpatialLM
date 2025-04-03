@@ -1,17 +1,27 @@
 import sys
 import json
 import time
+import os
 
 def generate_model(prompt):
     try:
         # Имитация работы модели
         time.sleep(2)  # Имитация задержки
         
+        # Создаем папку для моделей, если её нет
+        models_dir = os.path.join(os.path.dirname(__file__), "models")  # Путь к папке models
+        os.makedirs(models_dir, exist_ok=True)  # Создаем директорию, если её нет
+
+        # Сохраняем фиктивную GLTF-модель
+        output_path = os.path.join(models_dir, "generated_model.gltf")  # Путь к файлу
+        with open(output_path, "w") as f:
+            f.write('{"asset": {"version": "2.0"}, "scene": 0, "scenes": [{"nodes": []}]}')
+
         # Формирование результата
         result = {
             "status": "success",
             "message": f"Generated 3D model for prompt: {prompt}",
-            "model_url": "http://example.com/models/generated_model.gltf",  # Фиктивная ссылка
+            "model_url": os.path.relpath(output_path, start=os.path.dirname(__file__)),  # Относительный путь
             "metadata": {
                 "format": "GLTF",
                 "size": "10MB",
